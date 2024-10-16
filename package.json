@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "blockchain.info": "^2.12.1",
+    "dotenv": "^16.4.5",
     "etherscan-api": "^10.0.0",
     "pg": "^7.7.1",
     "pg-hstore": "^2.3.2",
