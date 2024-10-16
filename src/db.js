@@ -13,6 +13,7 @@ import type { typeBtcTxItem } from '../flow-types/btc/btcTxItem';
 import type { typeEthInfuraNewHeads } from '../flow-types/eth/ethInfuraNewHeads';
 import type { typeEthBlock } from '../flow-types/eth/ethBlock';
 
+require('dotenv').config();
 const Sequelize = require('sequelize');
 const logger = require('pino')();
 const v = require('./validate');

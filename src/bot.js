@@ -13,6 +13,7 @@ import type { typeWatchPriceObj } from '../flow-types/validate/watchPriceObj';
 import type { typeSubscribeActualPriceFindOne } from '../flow-types/db/subscribeActualPrice';
 import type { typeBtcNewTxItem } from '../flow-types/btc/btcNewTxItem';
 
+require('dotenv').config();
 const Telegraf = require('telegraf');
 const session = require('telegraf/session');
 const Stage = require('telegraf/stage');

@@ -2,6 +2,7 @@
 import type { typeMetrics } from '../flow-types/stats/metrics';
 import type { typeUsers } from '../flow-types/stats/users';
 
+require('dotenv').config();
 const EventEmitter = require('events');
 const { xs } = require('./template');
 const v = require('./validate');
