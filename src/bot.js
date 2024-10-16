@@ -377,12 +377,13 @@ stage.register(aboutMenu);
 
 aboutMenu.enter((ctx) => {
   ctx.reply(xs`
-    ⚖️ Bot is Open Source project: https://github.com/nnqq/blockchain-explorer-telegram-bot
+    ⚖️ Bot is Open Source project: https://github.com/M-Killer-dev/blockchain-explorer-telegram-bot
     `);
 });
 
 aboutMenu.command('BTC', ctx => ctx.reply('1NMcEUqi5aaHJgjeA4YvQuSpCQFHpMwFvh'));
 aboutMenu.command('ETH', ctx => ctx.reply('0x98C3d9261CC817D47f262F02852483E8e3BAc5dc'));
+aboutMenu.command('SOL', ctx => ctx.reply('HX9oiyMcvFKRDeme6YMY9oqAvtnHr1rsbcom9zPbBfZB'));
 
 const subsPriceMenu = new Scene('subsPriceMenu');
 stage.register(subsPriceMenu);

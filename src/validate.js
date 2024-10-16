@@ -69,6 +69,16 @@ class validate {
     return pattern.test(str);
   }
 
+  static isSolAddress(str: string): boolean {
+    const pattern: RegExp = /^(0x)?[a-fA-F0-9]{46}$/;
+    return pattern.test(str);
+  }
+
+  static isSolTx(str: string): boolean {
+    const pattern: RegExp = /^0x([a-fA-F0-9]{88})$/;
+    return pattern.test(str);
+  }
+
   static isPriceOutOfRange(currentPrice: number, priceLow: number, priceHigh: number): boolean {
     return currentPrice < priceLow || currentPrice > priceHigh;
   }
