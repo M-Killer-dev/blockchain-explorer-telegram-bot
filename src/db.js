@@ -45,10 +45,10 @@ const sequelize = new Sequelize(process.env.DB_URL, {
 
 const AddrWatchList = sequelize.define('AddrWatchList', {
   chatId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.Sequelize.BIGINT,
     allowNull: false,
     validate: {
-      isInt: true,
+      isNumeric: true,
     },
   },
   coinName: {
@@ -80,10 +80,10 @@ AddrWatchList.sync();
 
 const PriceWatchList = sequelize.define('PriceWatchList', {
   chatId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.Sequelize.BIGINT,
     allowNull: false,
     validate: {
-      isInt: true,
+      isNumeric: true,
     },
   },
   coinName: {
@@ -91,17 +91,17 @@ const PriceWatchList = sequelize.define('PriceWatchList', {
     allowNull: false,
   },
   priceLow: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.Sequelize.BIGINT,
     allowNull: false,
     validate: {
-      isInt: true,
+      isNumeric: true,
     },
   },
   priceHigh: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.Sequelize.BIGINT,
     allowNull: false,
     validate: {
-      isInt: true,
+      isNumeric: true,
     },
   },
 }, {
@@ -115,18 +115,18 @@ PriceWatchList.sync();
 
 const SubscribeActualPrice = sequelize.define('SubscribeActualPrice', {
   chatId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.Sequelize.BIGINT,
     unique: true,
     allowNull: false,
     validate: {
-      isInt: true,
+      isNumeric: true,
     },
   },
   hoursInterval: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.Sequelize.BIGINT,
     allowNull: false,
     validate: {
-      isInt: true,
+      isNumeric: true,
     },
   },
 });
@@ -149,7 +149,7 @@ function btcUnsub(wsBtc: Object, address: string) {
   wsBtc.send(addrUnsub);
 }
 
-async function checkUserWatchersLimit(chat: number) {
+async function checkUserWatchersLimit(chat: bigint) {
   const userRows: number = await AddrWatchList.count({
     where: {
       chatId: chat,
@@ -175,7 +175,7 @@ class db {
     });
   }
 
-  static async getWatchListMsg(chat: number): Promise<string> {
+  static async getWatchListMsg(chat: bigint): Promise<string> {
     const watchList: typeAddrWatchListFindAndCountAll = await AddrWatchList.findAndCountAll({
       where: {
         chatId: chat,
@@ -199,7 +199,7 @@ class db {
       `;
   }
 
-  static async btcSubAndCreate(wsBtc: Object, chat: number, addr: string) {
+  static async btcSubAndCreate(wsBtc: Object, chat: bigint, addr: string) {
     await checkUserWatchersLimit(chat);
     btcSub(wsBtc, addr);
     await AddrWatchList.create({
@@ -208,7 +208,7 @@ class db {
     });
   }
 
-  static async btcUnsubAndDelete(wsBtc: Object, chat: number, addr: string) {
+  static async btcUnsubAndDelete(wsBtc: Object, chat: bigint, addr: string) {
     const [rowToDelete, otherUsersWatchSameAddr]: [typeAddrWatchListFindOne,
       number] = await Promise.all([
         AddrWatchList.findOne({
@@ -232,7 +232,7 @@ class db {
     await rowToDelete.destroy();
   }
 
-  static async ethCreate(chat: number, addr: string) {
+  static async ethCreate(chat: bigint, addr: string) {
     await checkUserWatchersLimit(chat);
     await AddrWatchList.create({
       chatId: chat,
@@ -240,7 +240,7 @@ class db {
     });
   }
 
-  static async ethDelete(chat: number, addr: string) {
+  static async ethDelete(chat: bigint, addr: string) {
     const rowToDelete: typeAddrWatchListFindOne = await AddrWatchList.findOne({
       where: {
         chatId: chat,
@@ -253,7 +253,7 @@ class db {
     await rowToDelete.destroy();
   }
 
-  static async unsubAndDeleteAll(wsBtc: Object, chat: number) {
+  static async unsubAndDeleteAll(wsBtc: Object, chat: bigint) {
     const rowsToDelete: typeAddrWatchListFindAll = await AddrWatchList.findAll({
       where: {
         chatId: chat,
@@ -280,7 +280,7 @@ class db {
     });
   }
 
-  static async getPriceWatchMsg(chat: number): Promise<string> {
+  static async getPriceWatchMsg(chat: bigint): Promise<string> {
     const userRows: typePriceWatchListfindAndCountAll = await PriceWatchList.findAndCountAll({
       where: {
         chatId: chat,
@@ -305,7 +305,7 @@ class db {
       `;
   }
 
-  static async createPriceWatcher(chat: number, coin: string, priceLo: number, priceHi: number) {
+  static async createPriceWatcher(chat: bigint, coin: string, priceLo: number, priceHi: number) {
     try {
       await PriceWatchList.create({
         chatId: chat,
@@ -320,7 +320,7 @@ class db {
     }
   }
 
-  static async deletePriceWatcher(chat: number, coin: string) {
+  static async deletePriceWatcher(chat: bigint, coin: string) {
     await PriceWatchList.destroy({
       where: {
         chatId: chat,
@@ -329,7 +329,7 @@ class db {
     });
   }
 
-  static getUserPriceSubs(chat: number): Promise<typeSubscribeActualPriceFindOne> {
+  static getUserPriceSubs(chat: bigint): Promise<typeSubscribeActualPriceFindOne> {
     return SubscribeActualPrice.findOne({
       where: {
         chatId: chat,
@@ -337,14 +337,14 @@ class db {
     });
   }
 
-  static async subsActualPrice(chat: number, interval: number) {
+  static async subsActualPrice(chat: bigint, interval: number) {
     await SubscribeActualPrice.create({
       chatId: chat,
       hoursInterval: interval,
     });
   }
 
-  static async unsubActualPrice(chat: number) {
+  static async unsubActualPrice(chat: bigint) {
     await SubscribeActualPrice.destroy({
       where: {
         chatId: chat,
